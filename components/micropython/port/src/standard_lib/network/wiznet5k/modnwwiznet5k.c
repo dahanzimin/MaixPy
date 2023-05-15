@@ -410,7 +410,7 @@ STATIC void wiz_cris_exit(void) {
 /* The handler of ip assign first */
 static void dhcp_ip_assign(void) {
 #ifdef _DHCP_DEBUG_
-  mp_printf(&mp_plat_print, "get ip success");
+  mp_printf(&mp_plat_print, "Get ip success");
 #endif
   uint8_t ip[4], gw[4], sn[4], dns[4];
 
@@ -434,7 +434,7 @@ static void dhcp_ip_assign(void) {
 /* The handler of ip update */
 static void dhcp_ip_update(void) {
 #ifdef _DHCP_DEBUG_
-  mp_printf(&mp_plat_print, "get ip update\r\n");
+  mp_printf(&mp_plat_print, "Get ip update\r\n");
 #endif
   return;
 }
@@ -462,7 +462,7 @@ STATIC void wiznet5k_make_new_helper(size_t n_args, size_t n_kw,
                             allowed_args, args_parsed);
 
   if (!MP_OBJ_IS_TYPE(args_parsed[ARG_spi].u_obj, &machine_hw_spi_type)) {
-    mp_raise_TypeError("[MAIXPY]spi: object type error");
+    mp_raise_TypeError("SPI: object type error");
     return mp_const_false;
   }
 

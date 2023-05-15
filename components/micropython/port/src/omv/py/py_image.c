@@ -6780,7 +6780,7 @@ mp_obj_t py_image_font_load(size_t n_args, const mp_obj_t *args, mp_map_t *kw_ar
             mp_int_t font_addr = mp_obj_get_int(args[3]);
             if(font_addr <= 0)
             {
-                mp_raise_ValueError("[MAIXPY]image: font_addr must > 0 ");
+                mp_raise_ValueError("Image: font_addr must > 0 ");
                 return mp_const_false;
             }
             else
@@ -6806,7 +6806,7 @@ mp_obj_t py_image_font_load(size_t n_args, const mp_obj_t *args, mp_map_t *kw_ar
             }
             else
             {
-                mp_raise_ValueError("[MAIXPY]image: font format don't match, only supply .Dzk ");
+                mp_raise_ValueError("Image: font format don't match, only supply .Dzk ");
                 return mp_const_false;
             }
         }

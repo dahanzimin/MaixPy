@@ -92,11 +92,11 @@ STATIC mp_obj_t esp32_nic_ping(size_t n_args, const mp_obj_t *pos_args, mp_map_t
     int32_t time = esp32_spi_ping((uint8_t*)host, host_type, 100);
     if(time == -2)
     {
-        mp_raise_msg(&mp_type_OSError, "get host name fail");
+        mp_raise_msg(&mp_type_OSError, "Get host name fail");
     }
     else if(time < 0)
     {
-        mp_raise_msg(&mp_type_OSError, "get response fail");
+        mp_raise_msg(&mp_type_OSError, "Get response fail");
     }
     return mp_obj_new_int(time);
 }
@@ -170,7 +170,7 @@ STATIC mp_obj_t esp32_scan_wifi( mp_obj_t self_in )
     aps_list->del(aps_list);
     return list;
 err:
-    snprintf(fail_str, 30, "wifi scan fail");
+    snprintf(fail_str, 30, "WiFi scan fail");
     mp_raise_msg(&mp_type_OSError, fail_str);
 }
 
@@ -206,7 +206,7 @@ STATIC void esp32_make_new_helper(esp32_nic_obj_t *self, size_t n_args, const mp
     cs = args_parsed[ARG_cs].u_int;
     if (cs == -1 || cs > FUNC_GPIOHS31 || cs < FUNC_GPIOHS0)
     {
-        mp_raise_ValueError("gpiohs cs value error!");
+        mp_raise_ValueError("GPIOHS cs value error!");
     }
 
     //rst
@@ -215,7 +215,7 @@ STATIC void esp32_make_new_helper(esp32_nic_obj_t *self, size_t n_args, const mp
     {
         if (rst > FUNC_GPIOHS31 || rst < FUNC_GPIOHS0)
         {
-            mp_raise_ValueError("gpiohs rst value error!");
+            mp_raise_ValueError("GPIOHS rst value error!");
         }
     }
 
@@ -223,39 +223,39 @@ STATIC void esp32_make_new_helper(esp32_nic_obj_t *self, size_t n_args, const mp
     rdy = args_parsed[ARG_rdy].u_int;
     if (rdy == -1 || rdy > FUNC_GPIOHS31 || rdy < FUNC_GPIOHS0)
     {
-        mp_raise_ValueError("gpiohs rdy value error!");
+        mp_raise_ValueError("GPIOHS rdy value error!");
     }
 
     //hard_spi
     spi = args_parsed[ARG_spi].u_int;
     if (spi > 0)
     {
-        mp_printf(&mp_plat_print, "[esp32_spi] use hard spi(%d)\r\n", spi);
+        mp_printf(&mp_plat_print, "ESP32 use hard spi(%d)\r\n", spi);
         hard_spi_config_io();
     }
     else
     {
-        mp_printf(&mp_plat_print, "[esp32_spi] use soft spi\r\n");
+        mp_printf(&mp_plat_print, "ESP32 use soft spi\r\n");
         
         //mosi
         mosi = args_parsed[ARG_mosi].u_int;
         if (mosi == -1 || mosi > FUNC_GPIOHS31 || mosi < FUNC_GPIOHS0)
         {
-            mp_raise_ValueError("gpiohs mosi value error!");
+            mp_raise_ValueError("GPIOHS mosi value error!");
         }
 
         //miso
         miso = args_parsed[ARG_miso].u_int;
         if (miso == -1 || miso > FUNC_GPIOHS31 || miso < FUNC_GPIOHS0)
         {
-            mp_raise_ValueError("gpiohs miso value error!");
+            mp_raise_ValueError("GPIOHS miso value error!");
         }
 
         //sclk
         sclk = args_parsed[ARG_sclk].u_int;
         if (sclk == -1 || sclk > FUNC_GPIOHS31 || sclk < FUNC_GPIOHS0)
         {
-            mp_raise_ValueError("gpiohs sclk value error!");
+            mp_raise_ValueError("GPIOHS sclk value error!");
         }
 
         soft_spi_config_io(mosi - FUNC_GPIOHS0, miso - FUNC_GPIOHS0, sclk - FUNC_GPIOHS0);
@@ -280,7 +280,7 @@ STATIC mp_obj_t esp32_make_new(const mp_obj_type_t *type, size_t n_args, size_t 
 {
     if (n_args != 0 || n_kw > 7)
     {
-        mp_raise_ValueError("error argument");
+        mp_raise_ValueError("Error argument");
         return mp_const_none;
     }
     esp32_nic_obj_t *self = m_new_obj(esp32_nic_obj_t);
@@ -309,8 +309,8 @@ STATIC mp_obj_t esp32_firmware_version(mp_obj_t self_in)
 STATIC mp_obj_t esp32_adc(size_t n_args, const mp_obj_t *pos_args) {
     //A0 -> ch5, A1->ch4, A2->ch7, A3->ch6, A4->ch3, A5->ch0
     uint16_t adc[ESP32_ADC_CH_NUM] = {0};
-    static const uint8_t channels_remap[ESP32_ADC_CH_NUM] = {5, 4, 7, 6, 3, 0};
-    uint8_t channels[ESP32_ADC_CH_NUM] = {5, 4, 7, 6, 3, 0};
+    static const uint8_t channels_remap[ESP32_ADC_CH_NUM] = {0, 1, 2, 3, 4, 5, 6, 7};
+    uint8_t channels[ESP32_ADC_CH_NUM] = {0, 1, 2, 3, 4, 5, 6, 7};
     uint8_t len = sizeof(channels);
     mp_int_t temp;
     if(n_args > 1){
@@ -347,7 +347,7 @@ STATIC mp_obj_t esp32_adc(size_t n_args, const mp_obj_t *pos_args) {
     }
     else
     {
-        mp_raise_ValueError("[MaixPy]: esp32 read adc failed!\r\n");
+        mp_raise_ValueError("ESP32 read adc failed!\r\n");
     }
 }
 

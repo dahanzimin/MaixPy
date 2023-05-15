@@ -68,7 +68,7 @@ STATIC mp_obj_t speech_isolated_word_init_helper(isolated_word_obj_t *self_in, s
 
     self->mfcc_dats = m_new(v_ftr_tag, args[ARG_size].u_int);
     if (self->mfcc_dats == NULL) {
-        mp_raise_ValueError("[MAIXPY] mfcc_dats malloc fail (not enough memory)");
+        mp_raise_ValueError("Mfcc_dats malloc fail (not enough memory)");
     }
     self->size = args[ARG_size].u_int;
     self->device_num = args[ARG_i2s].u_int;
@@ -131,7 +131,7 @@ MP_DEFINE_CONST_FUN_OBJ_1(speech_isolated_word_state_obj, speech_isolated_word_s
 
 STATIC void speech_isolated_word_print(const mp_print_t *print, mp_obj_t self_in, mp_print_kind_t kind) {
     isolated_word_obj_t *self = MP_OBJ_TO_PTR(self_in);
-    mp_printf(print, "[MAIXPY] isolated_word:(%p)\r\n mfcc_dats=%p\r\n size=%d\r\n i2s_device_number_t=%d\r\n dmac_channel_number_t=%d\r\n", self, self->mfcc_dats, self->size, self->device_num, self->channel_num);
+    mp_printf(print, "Isolated_word:(%p)\r\n mfcc_dats=%p\r\n size=%d\r\n i2s_device_number_t=%d\r\n dmac_channel_number_t=%d\r\n", self, self->mfcc_dats, self->size, self->device_num, self->channel_num);
 }
 
 STATIC mp_obj_t speech_isolated_word_set_threshold(size_t n_args, const mp_obj_t *pos_args, mp_map_t *kw_args)
@@ -167,7 +167,7 @@ STATIC mp_obj_t speech_isolated_word_set(mp_obj_t self_in, mp_obj_t pos_in, mp_o
     mp_obj_get_array(tuple_in, &len, &elem);
 
     if (len != 2) {
-        mp_raise_ValueError("isolated_word error, is not (frm_num, mfcc_dat[vv_frm_max*mfcc_num*sizeof(uint16_t)])");
+        mp_raise_ValueError("Isolated_word error, is not (frm_num, mfcc_dat[vv_frm_max*mfcc_num*sizeof(uint16_t)])");
     }
     
     int frm_num = mp_obj_get_int(elem[0]);
@@ -176,7 +176,7 @@ STATIC mp_obj_t speech_isolated_word_set(mp_obj_t self_in, mp_obj_t pos_in, mp_o
     mp_get_buffer_raise(elem[1], &bufinfo, MP_BUFFER_READ);
 
     if (bufinfo.len != vv_frm_max*mfcc_num*sizeof(uint16_t)) {
-        mp_raise_ValueError("bufinfo.len != vv_frm_max*mfcc_num");
+        mp_raise_ValueError("Bufinfo.len != vv_frm_max*mfcc_num");
     }
     
     speech_set_word(self->mfcc_dats, pos, bufinfo.buf, frm_num);
@@ -245,7 +245,7 @@ STATIC mp_obj_t speech_isolated_word_dtw(mp_obj_t self_in, mp_obj_t tuple_in)
         mp_obj_get_array(tuple_in, &len, &elem);
 
         if (len != 2) {
-            mp_raise_ValueError("isolated_word error, is not (frm_num, mfcc_dat[vv_frm_max*mfcc_num])");
+            mp_raise_ValueError("Isolated_word error, is not (frm_num, mfcc_dat[vv_frm_max*mfcc_num])");
         }
         
         int frm_num = mp_obj_get_int(elem[0]);
@@ -253,7 +253,7 @@ STATIC mp_obj_t speech_isolated_word_dtw(mp_obj_t self_in, mp_obj_t tuple_in)
         mp_buffer_info_t bufinfo;
         mp_get_buffer_raise(elem[1], &bufinfo, MP_BUFFER_READ);
         if (bufinfo.len != vv_frm_max*mfcc_num*sizeof(uint16_t)) {
-            mp_raise_ValueError("bufinfo.len != vv_frm_max*mfcc_num");
+            mp_raise_ValueError("Bufinfo.len != vv_frm_max*mfcc_num");
         }
         
         v_ftr_tag ftr_mdl;

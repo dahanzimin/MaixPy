@@ -12,7 +12,7 @@ else:
     os.chdir("/flash")
 sys.path.append('/flash')
 
-print("[MaixPy] init end") # for IDE
+print("Init end") # for IDE
 for i in range(200):
     time.sleep_ms(1) # wait for key interrupt(for maixpy ide)
 

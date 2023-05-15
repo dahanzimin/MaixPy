@@ -56,28 +56,28 @@ mp_obj_t modules_ws2812_make_new(const mp_obj_type_t *type, size_t n_args, size_
     
     if( ( args[ARG_led_pin].u_int < 0 ) || ( args[ARG_led_pin].u_int > 47 ) )
     {
-        mp_raise_ValueError("led pin error, should be 0 ~ 47");
+        mp_raise_ValueError("LED pin error, should be 0 ~ 47");
     }
     self->len_pin = args[ARG_led_pin].u_int;
 
     if( ( args[ARG_led_num].u_int < 0 ) )
     {
-        mp_raise_ValueError("len num error, should > 0");
+        mp_raise_ValueError("Len num error, should > 0");
     }
 
     if( ( args[ARG_i2s_num].u_int >=  I2S_DEVICE_MAX) )
     {
-        mp_raise_ValueError("i2s num error, should <= 2");
+        mp_raise_ValueError("I2S num error, should <= 2");
     }
 
     if( ( args[ARG_i2s_chn].u_int >  I2S_CHANNEL_3) )
     {
-        mp_raise_ValueError("i2s channel error, should <= 3");
+        mp_raise_ValueError("I2S channel error, should <= 3");
     }
 
     if( ( args[ARG_i2s_dma_chn].u_int >=  DMAC_CHANNEL_MAX) )
     {
-        mp_raise_ValueError("dma channel error, should <= 5");
+        mp_raise_ValueError("DMA channel error, should <= 5");
     }
 
     self->dat = ws2812_init_buf(args[ARG_led_num].u_int);
@@ -105,7 +105,7 @@ mp_obj_t modules_ws2812_make_new(const mp_obj_type_t *type, size_t n_args, size_
 STATIC void modules_ws2812_print(const mp_print_t *print, mp_obj_t self_in, mp_print_kind_t kind) {
     modules_ws2812_obj_t *self = MP_OBJ_TO_PTR(self_in);
     ws2812_info *info = (ws2812_info*)self->dat;
-    mp_printf(print, "[MAIXPY]ws2812:(%p) \r\nled pin=%d num: %d buf:%p\r\ni2s: I2S_DEVICE_%d I2S_CHANNEL_%d\t DMAC_CHANNEL%d", 
+    mp_printf(print, "WS2812:(%p) \r\nled pin=%d num: %d buf:%p\r\ni2s: I2S_DEVICE_%d I2S_CHANNEL_%d\t DMAC_CHANNEL%d", 
                     self, self->len_pin,self->dat->ws_num,self->dat->ws_buf,self->i2s_num,self->i2s_chn,self->i2s_dma_chn);
 }
 
@@ -148,7 +148,7 @@ STATIC mp_obj_t modules_ws2812_set_led(size_t n_args, const mp_obj_t *pos_args, 
         mp_obj_tuple_get(color, &size, &tuple_data);
         if(size != 3)
         {
-            mp_raise_ValueError("tuple size must be 3");
+            mp_raise_ValueError("Tuple size must be 3");
         }
 
         rgb[0] = mp_obj_get_int(tuple_data[0]);
