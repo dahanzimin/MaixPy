@@ -6706,7 +6706,7 @@ mp_obj_t py_image_font_load(size_t n_args, const mp_obj_t *args, mp_map_t *kw_ar
             mp_int_t font_addr = mp_obj_get_int(args[3]);
             if(font_addr <= 0)
             {
-                mp_raise_ValueError("[MAIXPY]image: font_addr must > 0 ");
+                mp_raise_ValueError("Image: font_addr must > 0 ");
                 return mp_const_false;
             }
             else
@@ -6732,7 +6732,7 @@ mp_obj_t py_image_font_load(size_t n_args, const mp_obj_t *args, mp_map_t *kw_ar
             }
             else
             {
-                mp_raise_ValueError("[MAIXPY]image: font format don't match, only supply .Dzk ");
+                mp_raise_ValueError("Image: font format don't match, only supply .Dzk ");
                 return mp_const_false;
             }
         }
@@ -7070,11 +7070,11 @@ mp_obj_t py_image_warpAffine_ai(mp_obj_t src_img_obj , mp_obj_t dst_img_obj , mp
         }
         else if(ret == -2)
         {
-            mp_raise_msg(&mp_type_ValueError, "only support ai image affine");
+            mp_raise_msg(&mp_type_ValueError, "Only support ai image affine");
         }
         else if(ret == -3)
         {
-            mp_raise_msg(&mp_type_ValueError,"only support grayscale or RGB565 pic");
+            mp_raise_msg(&mp_type_ValueError,"Only support grayscale or RGB565 pic");
             
         }
         mp_raise_OSError(ret);

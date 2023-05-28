@@ -35,13 +35,13 @@ int region_layer_init(region_layer_t *rl, void* ctx)
 	
 	if(sipeed_kpu_model_get_input_shape(ctx, &wi, &hi, &chi) != SIPEED_KPU_ERR_NONE)
 	{
-		// mp_printf(&mp_plat_print, "[MAIXPY]rl: first layer not conv layer!\r\n");
+		// mp_printf(&mp_plat_print, "rl: first layer not conv layer!\r\n");
 		return -1;
 	}
 	
 	if(sipeed_kpu_model_get_output_shape(ctx, &wo, &ho, &cho) != SIPEED_KPU_ERR_NONE)
 	{
-		// mp_printf(&mp_plat_print, "[MAIXPY]rl: can't fetch last layer!\r\n");
+		// mp_printf(&mp_plat_print, "rl: can't fetch last layer!\r\n");
 		return -1;
 	}
 

@@ -92,11 +92,11 @@ STATIC mp_obj_t esp32_nic_ping(size_t n_args, const mp_obj_t *pos_args, mp_map_t
     int32_t time = esp32_spi_ping((uint8_t*)host, host_type, 100);
     if(time == -2)
     {
-        mp_raise_msg(&mp_type_OSError, "get host name fail");
+        mp_raise_msg(&mp_type_OSError, "Get host name fail");
     }
     else if(time < 0)
     {
-        mp_raise_msg(&mp_type_OSError, "get response fail");
+        mp_raise_msg(&mp_type_OSError, "Get response fail");
     }
     return mp_obj_new_int(time);
 }
@@ -170,7 +170,7 @@ STATIC mp_obj_t esp32_scan_wifi( mp_obj_t self_in )
     aps_list->del(aps_list);
     return list;
 err:
-    snprintf(fail_str, 30, "wifi scan fail");
+    snprintf(fail_str, 30, "WiFi scan fail");
     mp_raise_msg(&mp_type_OSError, fail_str);
 }
 
@@ -230,12 +230,12 @@ STATIC void esp32_make_new_helper(esp32_nic_obj_t *self, size_t n_args, const mp
     spi = args_parsed[ARG_spi].u_int;
     if (spi > 0)
     {
-        mp_printf(&mp_plat_print, "[esp32_spi] use hard spi(%d)\r\n", spi);
+        //mp_printf(&mp_plat_print, "[esp32_spi] use hard spi(%d)\r\n", spi);
         hard_spi_config_io();
     }
     else
     {
-        mp_printf(&mp_plat_print, "[esp32_spi] use soft spi\r\n");
+        //mp_printf(&mp_plat_print, "[esp32_spi] use soft spi\r\n");
         
         //mosi
         mosi = args_parsed[ARG_mosi].u_int;
@@ -280,7 +280,7 @@ STATIC mp_obj_t esp32_make_new(const mp_obj_type_t *type, size_t n_args, size_t 
 {
     if (n_args != 0 || n_kw > 7)
     {
-        mp_raise_ValueError("error argument");
+        mp_raise_ValueError("Error argument");
         return mp_const_none;
     }
     esp32_nic_obj_t *self = m_new_obj(esp32_nic_obj_t);
@@ -347,7 +347,7 @@ STATIC mp_obj_t esp32_adc(size_t n_args, const mp_obj_t *pos_args) {
     }
     else
     {
-        mp_raise_ValueError("[MaixPy]: esp32 read adc failed!\r\n");
+        mp_raise_ValueError("ESP32 read adc failed!\r\n");
     }
 }
 
