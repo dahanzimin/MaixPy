@@ -263,10 +263,10 @@ static void hard_spi_transfer_data_standard(spi_device_num_t spi_num, spi_chip_s
 // void soft_spi_init(void)
 void hard_spi_config_io()
 {
-    printf("hard spi\r\n");
+    //printf("hard spi\r\n");
     //init SPI_DEVICE_1
     // spi_init(SPI_DEVICE_1, SPI_WORK_MODE_0, SPI_FF_STANDARD, 8, 0);
-    printf("esp32 set hard spi clk:%d\r\n", spi_set_clk_rate(SPI_DEVICE_1, 1000000 * 9)); /*set clk rate*/
+    printf("ESP32 hard SPI CLK:%d\r\n", spi_set_clk_rate(SPI_DEVICE_1, 1000000 * 9)); /*set clk rate*/
 
     // fpioa_set_function(27, FUNC_SPI1_SCLK);
     // fpioa_set_function(28, FUNC_SPI1_D0);

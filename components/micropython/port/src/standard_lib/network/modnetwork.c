@@ -43,10 +43,14 @@
 #include "lwip/dns.h"
 #include "lwip/dhcp.h"
 
-u32_t sys_now(void) {
-    return mp_hal_ticks_ms();
-}
+// u32_t sys_now(void) {
+//     return mp_hal_ticks_ms();
+// }
 
+u32_t sys_now(void)
+{
+  return xTaskGetTickCount() * portTICK_PERIOD_MS;
+}
 #endif
 
 // module network - network configuration

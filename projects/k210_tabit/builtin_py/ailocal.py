@@ -35,7 +35,7 @@ def training(class_names,sample_numd,save):
     
     import image,sensor,board
     
-    key = board.pin(24,board.GPIO.IN,board.GPIO.PULL_UP)
+    key = board.pin(16,board.GPIO.IN)
     model = kpu.load(0x300000)
     class_num = len(class_names)
     sample_num = class_num*sample_numd
@@ -50,7 +50,7 @@ def training(class_names,sample_numd,save):
         try:
             img=sensor.snapshot()
         except Exception:
-            raise("[MixNo]camera not called")
+            raise("[AIBIT]camera not called")
         if key.value() == 0:
             time.sleep_ms(30)
             if key.value() == 0 and (last_btn_status == 1) and (time.ticks_ms() - last_cap_time > 500):
@@ -65,15 +65,15 @@ def training(class_names,sample_numd,save):
                     cap_num += 1
                     print("add sample image:", index)
             else:
-                img.draw_string(0,0,"Please A-key release",(255,0,0),2,mono_space=0)
+                img.draw_string(0,0,"Please anykey release",(255,0,0),2,mono_space=0)
         else:
             time.sleep_ms(30)
             if key.value() == 1 and (last_btn_status == 0):
                 last_btn_status = 1
             if cap_num < class_num:
-                img.draw_string(0,0, "Press A-key to "+class_names[cap_num],(255,0,0),2,mono_space=0)
+                img.draw_string(0,0, "Press anykey - "+class_names[cap_num],(255,0,0),2,mono_space=0)
             elif cap_num < class_num + sample_num:
-                img.draw_string(0,0,  "Press A-key to NO.{}".format(cap_num-class_num),(255,0,0),2,mono_space=0)
+                img.draw_string(0,0,  "Press anykey - NO.{}".format(cap_num-class_num),(255,0,0),2,mono_space=0)
                        
         if cap_num >= class_num + sample_num:
             print("start train")
@@ -96,4 +96,4 @@ def predict(img,class_names):
         res_index, min_dist = classifier.predict(img)
         return (class_names[res_index],99-min_dist)
     except Exception as e:
-        raise("[MixNo]predict err:", e)        
+        raise("[AIBIT] predict err:", e)        

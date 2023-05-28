@@ -38,18 +38,6 @@ if ide:
     sys.exit()
 del ide, ide_mode_conf
 
-import board
-
-if(board.pin(16,board.GPIO.IN).value()==0):
-	ls=os.listdir()
-	del_paths = [name for name in ls if name.endswith('.py')]
-	for a in del_paths:
-		os.remove(a)
-		print("Delete --{}".format(a)) # for factory
-	del ls
-	del del_paths
-	print("Restore factory settings") # for factory
-# detect boot.py
 
 #IP506 configuration
 try:
@@ -60,6 +48,21 @@ try:
 except Exception as e:
     print('Warning: Power management configuration failed ', e)
     
+# detect boot.py
+import board
+
+if(board.pin(16,board.GPIO.IN).value()==0):
+    from tabit import wifi
+    if wifi.adc()[0] <=100:
+        ls=os.listdir()
+        del_paths = [name for name in ls if name.endswith('.py')]
+        for a in del_paths:
+            os.remove(a)
+            print("Delete --{}".format(a)) # for factory
+        del ls
+        del del_paths
+        print("Restore factory settings") # for factory
+
 main_py = '''
 import lcd,image,random,time
 
@@ -69,10 +72,11 @@ image = image.Image()
 print("Welcome to TABIT")
 while True:
     for color in range(0, 0xFFFF):
+        image = image.draw_string(45, 0, "Welcome", 0xFFFF, 2, mono_space=0) 
         image = image.draw_string(75, 80,"TABIT", color, 6, mono_space=0) 
-        image = image.draw_string(160, 220, "AOIT_V2.0", 0xFFFF, 2, mono_space=0) 
+        image = image.draw_string(170, 220, "AOIT_V2.1", 0xFFFF, 2, mono_space=0) 
         lcd.display(image)
-        time.sleep_ms(100)
+        time.sleep_ms(50)
     image.clear()
     print("Factory reset test procedure")
     lcd.display(image)

@@ -230,12 +230,12 @@ STATIC void esp32_make_new_helper(esp32_nic_obj_t *self, size_t n_args, const mp
     spi = args_parsed[ARG_spi].u_int;
     if (spi > 0)
     {
-        mp_printf(&mp_plat_print, "ESP32 use hard spi(%d)\r\n", spi);
+        //mp_printf(&mp_plat_print, "ESP32 use hard spi(%d)\r\n", spi);
         hard_spi_config_io();
     }
     else
     {
-        mp_printf(&mp_plat_print, "ESP32 use soft spi\r\n");
+        //mp_printf(&mp_plat_print, "ESP32 use soft spi\r\n");
         
         //mosi
         mosi = args_parsed[ARG_mosi].u_int;

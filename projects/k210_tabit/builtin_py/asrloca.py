@@ -4,9 +4,9 @@ from Maix import I2S
 from machine import Timer
 from speech_recognizer import asr
 
-board.register(16,board.FPIOA.I2S0_IN_D0)
-board.register(14,board.FPIOA.I2S0_SCLK)
-board.register(15,board.FPIOA.I2S0_WS)
+board.register(20,board.FPIOA.I2S0_IN_D0)
+board.register(18,board.FPIOA.I2S0_SCLK)
+board.register(19,board.FPIOA.I2S0_WS)
 rx  = I2S(I2S.DEVICE_0)
 rx.channel_config(rx.CHANNEL_0, rx.RECEIVER, align_mode=I2S.STANDARD_MODE)
 rx.set_sample_rate(16000)
