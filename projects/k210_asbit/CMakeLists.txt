@@ -26,7 +26,7 @@ include(${SDK_PATH}/tools/cmake/compile.cmake)
 
 
 # Project Name
-project(MixNo)
+project(asbit)
 
 
 
