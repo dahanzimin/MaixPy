@@ -1,7 +1,7 @@
 """
 LTBIT -Onboard resources
 """
-import board, time
+import board, time, math
 from machine import I2C, UART
 
 ob_i2c = I2C(I2C.I2C0, freq=400000, scl=30, sda=31)
@@ -54,7 +54,7 @@ class MOTOR:
 			self._wreg(0x09 + index * 2, duty >> 8)
 			self._wreg(0x09 + index * 2 + 1, duty & 0xff)
 
-	def motor(self, index, speed=None, brake=False):
+	def motor(self, index, speed=None, brake=True):
 		if not 0 <= index <= 3:
 			raise ValueError("Motor port must be a number in the range: 0~3")
 		if speed is None:
@@ -87,8 +87,8 @@ class MOTOR:
 on_motor = MOTOR(ob_i2c)
 
 '''Video UART''' 
-board.register(23, board.FPIOA.UART2_TX)
-board.register(24, board.FPIOA.UART2_RX)
+board.register(28, board.FPIOA.UART2_TX)
+board.register(23, board.FPIOA.UART2_RX)
 uart2 = UART(UART.UART2, 921600, timeout=1000, read_buf_len=4096)
 _falg=True
 
@@ -101,8 +101,8 @@ def ob_stream(img, quality=80):
 	uart2.write(img.to_bytes())
 
 '''Data UART'''   
-board.register(28, board.FPIOA.UART3_TX)
-board.register(29, board.FPIOA.UART3_RX)
+board.register(29, board.FPIOA.UART3_TX)
+board.register(24, board.FPIOA.UART3_RX)
 uart3=UART(UART.UART3, 115200, timeout=1000, read_buf_len=4096)
 _data=None
 
@@ -146,3 +146,53 @@ class Button:
 		self._pin.irq(handler, trigger, board.GPIO.WAKEUP_NOT_SUPPORT, 7)
 
 key_boot = Button(0)
+
+'''4Hall_HEP'''
+class HALL:
+	def __init__(self, pin, scale_p=400, wheel_d=5):
+		self._pulse_turns = 1 / scale_p
+		self._pulse_distance = self._pulse_turns * math.pi * wheel_d
+		self._turns = 0.00 
+		self._distance = 0.00   #cm
+		self._speed = 0.00      #cm/s
+		self._on_receive = None
+		self._time = time.ticks_ms()
+		_irq = board.pin(pin, board.GPIO.IN, board.GPIO.PULL_UP)
+		_irq.irq(self.receive_cb, board.GPIO.IRQ_FALLING, board.GPIO.WAKEUP_NOT_SUPPORT, 7)
+
+	def sethall(self, scale_p, wheel_d):
+		self._pulse_turns = 1 / scale_p
+		self._pulse_distance = self._pulse_turns * math.pi * wheel_d
+
+	def receive_cb(self, event_source):
+		self._turns += self._pulse_turns
+		self._distance += self._pulse_distance
+		self._speed += self._pulse_distance
+		if self._on_receive:
+			self._on_receive(round(self._turns, 2), round(self._distance, 2))
+
+	def irq_cb(self, callback):
+		self._on_receive = callback
+
+	def turns(self, turns=None):
+		if turns is None:
+			return round(self._turns, 2)
+		else:
+			self._turns=turns
+
+	def distance(self,distance=None): #cm
+		if distance is None:
+			return round(self._distance, 2)
+		else:
+			self._distance = distance
+
+	def speed(self):   #cm/s
+		value = self._speed/time.ticks_diff(time.ticks_ms(), self._time)*1000 if self._speed>0 else 0
+		self._time = time.ticks_ms()
+		self._speed = 0
+		return round(value, 2)
+
+hall_M1 = HALL(19)
+hall_M2 = HALL(20)
+hall_M3 = HALL(21)
+hall_M4 = HALL(22)
