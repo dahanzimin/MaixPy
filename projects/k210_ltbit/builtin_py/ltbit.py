@@ -12,7 +12,7 @@ class MOTOR:
 		self._i2c = i2c_bus
 		self._addr = addr
 		if self._rreg(0x00)!= 0x25:
-			raise AttributeError("Cannot find a Motor")
+			print("Warning Cannot find a motor drive !")
 		self.reset()
 
 	def _wreg(self, reg, val):
@@ -147,52 +147,130 @@ class Button:
 
 key_boot = Button(0)
 
-'''4Hall_HEP'''
-class HALL:
-	def __init__(self, pin, scale_p=400, wheel_d=5):
-		self._pulse_turns = 1 / scale_p
-		self._pulse_distance = self._pulse_turns * math.pi * wheel_d
-		self._turns = 0.00 
-		self._distance = 0.00   #cm
-		self._speed = 0.00      #cm/s
-		self._on_receive = None
-		self._time = time.ticks_ms()
-		_irq = board.pin(pin, board.GPIO.IN, board.GPIO.PULL_UP)
-		_irq.irq(self.receive_cb, board.GPIO.IRQ_FALLING, board.GPIO.WAKEUP_NOT_SUPPORT, 7)
+'''HALL-1'''
+pulse_turns_1 = 1/400
+pulse_distance_1 = pulse_turns_1 * math.pi * 5
+turns_1 = 0
+distance_1 = 0
+_speed_1 = 0
+_receive_1 = None
+_time_1 = time.ticks_ms()
 
-	def sethall(self, scale_p, wheel_d):
-		self._pulse_turns = 1 / scale_p
-		self._pulse_distance = self._pulse_turns * math.pi * wheel_d
+def irp_func_1(x):
+	global pulse_turns_1, pulse_distance_1, turns_1, distance_1, _speed_1, _receive_1
+	turns_1 += pulse_turns_1
+	distance_1 += pulse_distance_1
+	_speed_1 += pulse_distance_1
+	if _receive_1:
+		_receive_1(turns_1, distance_1)
 
-	def receive_cb(self, event_source):
-		self._turns += self._pulse_turns
-		self._distance += self._pulse_distance
-		self._speed += self._pulse_distance
-		if self._on_receive:
-			self._on_receive(round(self._turns, 2), round(self._distance, 2))
+_irq_1 = board.pin(19, board.GPIO.IN, board.GPIO.PULL_NONE)
+_irq_1.irq(irp_func_1, board.GPIO.IRQ_FALLING, board.GPIO.WAKEUP_NOT_SUPPORT, 7)
 
-	def irq_cb(self, callback):
-		self._on_receive = callback
+'''HALL-2'''
+pulse_turns_2 = 1/400
+pulse_distance_2 = pulse_turns_2 * math.pi * 5
+turns_2 = 0
+distance_2 = 0
+_speed_2 = 0
+_receive_2 = None
+_time_2 = time.ticks_ms()
 
-	def turns(self, turns=None):
-		if turns is None:
-			return round(self._turns, 2)
-		else:
-			self._turns=turns
+def irp_func_2(x):
+	global pulse_turns_2, pulse_distance_2, turns_2, distance_2, _speed_2, _receive_2
+	turns_2 += pulse_turns_2
+	distance_2 += pulse_distance_2
+	_speed_2 += pulse_distance_2
+	if _receive_2:
+		_receive_2(turns_2, distance_2)
 
-	def distance(self,distance=None): #cm
-		if distance is None:
-			return round(self._distance, 2)
-		else:
-			self._distance = distance
+_irq_2 = board.pin(20, board.GPIO.IN, board.GPIO.PULL_NONE)
+_irq_2.irq(irp_func_2, board.GPIO.IRQ_FALLING, board.GPIO.WAKEUP_NOT_SUPPORT, 7)
 
-	def speed(self):   #cm/s
-		value = self._speed/time.ticks_diff(time.ticks_ms(), self._time)*1000 if self._speed>0 else 0
-		self._time = time.ticks_ms()
-		self._speed = 0
-		return round(value, 2)
+'''HALL-3'''
+pulse_turns_3 = 1/400
+pulse_distance_3 = pulse_turns_3 * math.pi * 5
+turns_3 = 0
+distance_3 = 0
+_speed_3 = 0
+_receive_3 = None
+_time_3 = time.ticks_ms()
 
-hall_M1 = HALL(19)
-hall_M2 = HALL(20)
-hall_M3 = HALL(21)
-hall_M4 = HALL(22)
+def irp_func_3(x):
+	global pulse_turns_3, pulse_distance_3, turns_3, distance_3, _speed_3, _receive_3
+	turns_3 += pulse_turns_3
+	distance_3 += pulse_distance_3
+	_speed_3 += pulse_distance_3
+	if _receive_3:
+		_receive_3(turns_3, distance_3)
+
+_irq_3 = board.pin(21, board.GPIO.IN, board.GPIO.PULL_NONE)
+_irq_3.irq(irp_func_3, board.GPIO.IRQ_FALLING, board.GPIO.WAKEUP_NOT_SUPPORT, 7)
+
+'''HALL-4'''
+pulse_turns_4 = 1/400
+pulse_distance_4 = pulse_turns_4 * math.pi * 5
+turns_4 = 0
+distance_4 = 0
+_speed_4 = 0
+_receive_4 = None
+_time_4 = time.ticks_ms()
+
+def irp_func_4(x):
+	global pulse_turns_4, pulse_distance_4, turns_4, distance_4, _speed_4, _receive_4
+	turns_4 += pulse_turns_4
+	distance_4 += pulse_distance_4
+	_speed_4 += pulse_distance_4
+	if _receive_4:
+		_receive_4(turns_4, distance_4)
+
+_irq_4 = board.pin(22, board.GPIO.IN, board.GPIO.PULL_NONE)
+_irq_4.irq(irp_func_4, board.GPIO.IRQ_FALLING, board.GPIO.WAKEUP_NOT_SUPPORT, 7)
+
+'''HALL-1-func'''
+def irq_cb_1(callback):
+	global _receive_1
+	_receive_1 = callback
+
+def speed_1():
+	global _speed_1, _time_1
+	value = _speed_1 / time.ticks_diff(time.ticks_ms(), _time_1)*1000 if _speed_1 > 0 else 0 
+	_time_1 = time.ticks_ms()
+	_speed_1 = 0
+	return round(value, 2)
+
+'''HALL-2-func'''
+def irq_cb_2(callback):
+	global _receive_2
+	_receive_2 = callback
+
+def speed_2():
+	global _speed_2, _time_2
+	value = _speed_2 / time.ticks_diff(time.ticks_ms(), _time_2)*1000 if _speed_2 > 0 else 0 
+	_time_2 = time.ticks_ms()
+	_speed_2 = 0
+	return round(value, 2)
+
+'''HALL-3-func'''
+def irq_cb_3(callback):
+	global _receive_3
+	_receive_3 = callback
+
+def speed_3():
+	global _speed_3, _time_3
+	value = _speed_3 / time.ticks_diff(time.ticks_ms(), _time_3)*1000 if _speed_3 > 0 else 0 
+	_time_3 = time.ticks_ms()
+	_speed_3 = 0
+	return round(value, 2)
+
+'''HALL-4-func'''
+def irq_cb_4(callback):
+	global _receive_4
+	_receive_4 = callback
+
+def speed_4():
+	global _speed_4, _time_4
+	value = _speed_4 / time.ticks_diff(time.ticks_ms(), _time_4)*1000 if _speed_4 > 0 else 0 
+	_time_4 = time.ticks_ms()
+	_speed_4 = 0
+	return round(value, 2)
