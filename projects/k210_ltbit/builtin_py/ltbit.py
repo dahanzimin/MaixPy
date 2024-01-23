@@ -95,7 +95,7 @@ _falg=True
 def ob_stream(img, quality=80):
 	global _falg 
 	if _falg:
-		board.register(23, board.FPIOA.UART2_TX)
+		board.register(28, board.FPIOA.UART2_TX)
 		_falg=False
 	img.compress(quality)
 	uart2.write(img.to_bytes())

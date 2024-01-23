@@ -71,7 +71,7 @@ while True:
 		list[2] = random.randint(1, 8)
 		image = image.draw_circle(list,(random.randint(0, 0xFFFF)),1,1)
 		image = image.draw_string(80,80,"MixNo",color,6,mono_space=0) 
-		image = image.draw_string(200,220,"Mini_V2.0.2",0xFFFF,2,mono_space=0) 
+		image = image.draw_string(200,220,"Mini_V2.0.5",0xFFFF,2,mono_space=0) 
 		lcd.display(image)
 		time.sleep_ms(50)
 	image.clear()

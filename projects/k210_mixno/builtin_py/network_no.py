@@ -17,17 +17,15 @@ def at_cmd(cmd="AT\r\n", resp="OK\r\n", timeout=100):
 		
 def wifi_reply(reply=5):
 	for _ in range(reply):
-		print('reset...')
 		wifi_en.value(0)
 		time.sleep_ms(50)
 		wifi_en.value(1)
-		time.sleep_ms(600) # at start > 500ms
+		time.sleep_ms(500) # at start > 500ms
 		if at_cmd(timeout=500):
-				return True
+			return True
  
 def wifi_init1():
 	wifi_reply(5)
-	at_cmd()
 	at_cmd("AT+UART_CUR=921600,8,1,0,0\r\n")
 	uart = UART(UART.UART2, 921600, timeout=1000, read_buf_len=10240) # important! baudrate too low or read_buf_len too small will loose data
 	try:
@@ -67,7 +65,16 @@ def scans(nic):
 	ap_info.sort(key=lambda x:x[2], reverse=True)
 	return ap_info
 
-def wlan_connect(account,password):
-	nic=wifi_init1()
-	nic.connect(account,password)
-	print(nic.ifconfig())
+def wlan_connect(account,password,reply=5):
+    print('try connect wifi ...')
+    for i in range(reply):
+        try:
+            nic=wifi_init1()
+            nic.connect(account, password)
+            if nic.isconnected():
+                break
+        except Exception as e:
+            err = e
+    if nic.ifconfig() is None:
+        raise RuntimeError(err) 
+    print(nic.ifconfig())
