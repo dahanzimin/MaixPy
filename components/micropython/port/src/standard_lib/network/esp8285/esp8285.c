@@ -1295,7 +1295,7 @@ bool sATCIPDOMAIN(esp8285_obj* nic, const char* domain_name, uint32_t timeout)
 bool qATCIPSTA_CUR(esp8285_obj* nic)
 {
 	int errcode = 0;
-	const char* cmd = "AT+CIPSTA_CUR?";
+	const char* cmd = "AT+CIPSTA?";
 	const mp_stream_p_t * uart_stream = mp_get_stream(nic->uart_obj);
 	rx_empty(nic);
 	uart_stream->write(nic->uart_obj,cmd,strlen(cmd),&errcode);
@@ -1305,7 +1305,7 @@ bool qATCIPSTA_CUR(esp8285_obj* nic)
 bool sATCIPSTA_CUR(esp8285_obj* nic, const char* ip,char* gateway,char* netmask)
 {
 	int errcode = 0;
-	const char* cmd = "AT+CIPSTA_CUR=";
+	const char* cmd = "AT+CIPSTA=";
 	const mp_stream_p_t * uart_stream = mp_get_stream(nic->uart_obj);
 	rx_empty(nic);
 	if(NULL == ip)
@@ -1335,7 +1335,7 @@ bool sATCIPSTA_CUR(esp8285_obj* nic, const char* ip,char* gateway,char* netmask)
 bool qATCWJAP_CUR(esp8285_obj* nic)
 {
 	int errcode = 0;
-	const char* cmd = "AT+CWJAP_CUR?";
+	const char* cmd = "AT+CWJAP?";
 	const mp_stream_p_t * uart_stream = mp_get_stream(nic->uart_obj);
 	rx_empty(nic);
 	uart_stream->write(nic->uart_obj,cmd,strlen(cmd),&errcode);
