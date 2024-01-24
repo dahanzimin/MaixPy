@@ -474,7 +474,7 @@ int sd_preload(int core)
   }
   else
   {
-    // printk(" mount sdcard failed\r\n");
+    // printk("[maixpy] mount sdcard failed\r\n");
   }
   dual_func = NULL; // remove task
   maixpy_sdcard_loading = false;
@@ -530,7 +530,7 @@ soft_reset:
 #endif
 #if MICROPY_ENABLE_GC
   gc_init(gc_heap, gc_heap + config->gc_heap_size);
-  printk("GC heap=%p-%p(%d)\r\n", gc_heap, gc_heap + config->gc_heap_size, config->gc_heap_size);
+  printk("gc heap=%p-%p(%d)\r\n", gc_heap, gc_heap + config->gc_heap_size, config->gc_heap_size);
 #endif
   mp_init();
   mp_obj_list_init(mp_sys_path, 0);
@@ -584,19 +584,19 @@ soft_reset:
     maix_config_init();
   }
   mount_sdcard();
-  // mp_printf(&mp_plat_print, "init end\r\n"); // for maixpy ide
+  // mp_printf(&mp_plat_print, "[MaixPy] init end\r\n"); // for maixpy ide
   // run boot-up scripts
-  mp_hal_set_interrupt_char(CHAR_CTRL_C); 
+  mp_hal_set_interrupt_char(CHAR_CTRL_C);
   int ret = pyexec_frozen_module("_boot.py");
-/*xhm  if (ret != 0 && !is_ide_dbg_mode()) // user canceled or ide mode
+  if (ret != 0 && !is_ide_dbg_mode()) // user canceled or ide mode
   {
     ret = pyexec_file_if_exists("boot.py");
     if (pyexec_mode_kind == PYEXEC_MODE_FRIENDLY_REPL)
     {
-      ret = pyexec_file_if_exists("boot.py");
+      ret = pyexec_file_if_exists("main.py");
     }
-  }*/
-/*xhm  do
+  }
+  do
   {
     ide_dbg_init();
     while ((!ide_dbg_script_ready()) && (!ide_dbg_need_save_file()))
@@ -626,7 +626,7 @@ soft_reset:
       ide_save_file();
     }
     if (ide_dbg_script_ready())
-    {
+    { pyexec_frozen_module("ide_debug.py");//just for maixpy ide,to fix amgio lcd bug
       nlr_buf_t nlr;
       if (nlr_push(&nlr) == 0)
       {
@@ -640,14 +640,14 @@ soft_reset:
       ide_dbg_on_script_end();
     }
   } while (MP_STATE_PORT(Maix_stdio_uart)->ide_debug_mode);
-*/
+
 #if MICROPY_PY_THREAD
   mp_thread_deinit();
 #endif
 #if MICROPY_ENABLE_GC
   gc_sweep_all();
 #endif
-  mp_hal_stdout_tx_strn("Soft reboot\r\n", 23);
+  mp_hal_stdout_tx_strn("soft reboot\r\n", 23);
   mp_deinit();
   msleep(10);
   goto soft_reset;
@@ -683,9 +683,9 @@ int maixpy_main()
   uarths_init();
   uarths_config(115200, 1);
   printk("\r\n");
-  //printk(" Pll0:freq:%d\r\n", sysctl_clock_get_freq(SYSCTL_CLOCK_PLL0));
-  //printk(" Pll1:freq:%d\r\n", sysctl_clock_get_freq(SYSCTL_CLOCK_PLL1));
-  //printk(" Pll2:freq:%d\r\n", sysctl_clock_get_freq(SYSCTL_CLOCK_PLL2));
+  printk("Pll0:freq:%d\r\n", sysctl_clock_get_freq(SYSCTL_CLOCK_PLL0));
+  printk("Pll1:freq:%d\r\n", sysctl_clock_get_freq(SYSCTL_CLOCK_PLL1));
+  printk("Pll2:freq:%d\r\n", sysctl_clock_get_freq(SYSCTL_CLOCK_PLL2));
   printk("CPU:freq:%d\r\n", sysctl_clock_get_freq(SYSCTL_CLOCK_CPU));
   printk("KPU:freq:%d\r\n", sysctl_clock_get_freq(SYSCTL_CLOCK_AI));
   sysctl_clock_enable(SYSCTL_CLOCK_AI);
