@@ -51,6 +51,7 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
+build_mpy
 build
 .vscode
 .config

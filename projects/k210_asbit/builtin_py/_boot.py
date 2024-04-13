@@ -64,7 +64,7 @@ while True:
     for color in range(0, 0xFFFF):
         image = image.draw_string(0, 0, "Welcome", 0xFFFF, 2, mono_space=0) 
         image = image.draw_string(35, 80,"ASBIT", color, 6, mono_space=0) 
-        image = image.draw_string(135, 220, "AOIT_V2.0", 0xFFFF, 2, mono_space=0) 
+        image = image.draw_string(135, 220, "AOIT_V2.2", 0xFFFF, 2, mono_space=0) 
         lcd.display(image)
         time.sleep_ms(50)
     image.clear()
