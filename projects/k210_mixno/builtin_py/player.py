@@ -1,13 +1,12 @@
-import board
-import audio,video
 from Maix import I2S
-import gc
+import board, gc, audio, video
 
 sample_rate=16000
 
 def voice_en(en):
-	voice_en=board.pin(20,board.GPIO.OUT)
-	voice_en.value(en)
+	if board.version == 0:
+		voice_en = board.pin(20,board.GPIO.OUT)
+		voice_en.value(en)
 
 def spk_init(sample_rate=16000):
 	voice_en(1)
@@ -15,7 +14,7 @@ def spk_init(sample_rate=16000):
 	board.register(23,board.FPIOA.I2S0_SCLK)
 	board.register(21,board.FPIOA.I2S0_WS)
 	wav_dev = I2S(I2S.DEVICE_0)
-	wav_dev.channel_config(I2S.CHANNEL_1, I2S.TRANSMITTER,resolution = I2S.RESOLUTION_16_BIT ,cycles = I2S.SCLK_CYCLES_32, align_mode = I2S.RIGHT_JUSTIFYING_MODE)
+	wav_dev.channel_config(I2S.CHANNEL_1, I2S.TRANSMITTER,resolution = I2S.RESOLUTION_16_BIT ,cycles = I2S.SCLK_CYCLES_32, align_mode =I2S.STANDARD_MODE if board.version else I2S.RIGHT_JUSTIFYING_MODE)
 	wav_dev.set_sample_rate(sample_rate)
 	return wav_dev
 
@@ -28,7 +27,6 @@ def mic_init(sample_rate=16000):
 	wav_dev.channel_config(wav_dev.CHANNEL_0, wav_dev.RECEIVER, align_mode=I2S.STANDARD_MODE)
 	wav_dev.set_sample_rate(sample_rate)
 	return wav_dev
-
 
 def audio_play(path,num=80):
 	try:
@@ -52,8 +50,7 @@ def audio_play(path,num=80):
 		gc.collect()		
 	except:
 		raise NameError("[MixNo]:No audio file loaded ")
-		
-			
+
 def audio_record(path,record_time):
 	try:
 		I2S=mic_init()
@@ -97,8 +94,7 @@ def video_play(path,num=80):
 		del I2S
 		gc.collect()
 	except:
-		raise NameError("[[MixNo]:No video file loaded ")
-
+		raise NameError("[MixNo]:No video file loaded ")
 
 def video_record(path,record_time):
 	try:
@@ -118,4 +114,3 @@ def video_record(path,record_time):
 		gc.collect()
 	except :
 		raise NameError("[MixNo]:Need to initialize camera")
-

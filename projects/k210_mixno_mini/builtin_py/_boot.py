@@ -41,7 +41,7 @@ del ide, ide_mode_conf
 
 import board
 
-if not ((0x48 in board.ob_i2c.scan()) and (0x49 in board.ob_i2c.scan())):
+if board.version is None:
 	raise Exception("Sorry, you are not using a MixNo board")	
 
 if board.key_a.is_pressed():
@@ -70,8 +70,8 @@ while True:
 		list[1] = random.randint(0, 240)
 		list[2] = random.randint(1, 8)
 		image = image.draw_circle(list,(random.randint(0, 0xFFFF)),1,1)
-		image = image.draw_string(80,80,"MixNo",color,6,mono_space=0) 
-		image = image.draw_string(200,220,"Mini_V2.0.5",0xFFFF,2,mono_space=0) 
+		image = image.draw_string(55,75,"MixNo",color,8,mono_space=0) 
+		image = image.draw_string(200,220,"LITE_V5.2.2",0xFFFF,2,mono_space=0) 
 		lcd.display(image)
 		time.sleep_ms(50)
 	image.clear()
